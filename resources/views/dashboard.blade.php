@@ -152,20 +152,19 @@
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="mb-auto">
     <div>
-      <h3 class="float-md-start mb-0">DinoCode</h3>
+      <h1 class="float-md-start mb-0">PREDICCION DE ESPECIES (PRUEBA)</h1>
       <nav class="nav nav-masthead justify-content-center float-md-end">
-        <a class="nav-link fw-bold py-1 px-0 active" aria-current="page" href="http://hongos.test/dashboard">Inicio</a>
 
       </nav>
     </div>
   </header>
 
   <main class="px-3">
-    <h1>Predicciones rapidas.</h1>
+    <h2>Predicciones rapidas.</h2>
     <p class="lead">Bienvenido a nuestra plataforma de predicción de nombres de hongos basada en aprendizaje automático. ¡Descubre el nombre de ese hongo misterioso!</p>
 
      <form id="imageForm" enctype="multipart/form-data" class=" g-3 align-items-center  lead">
-        <div class="col-7 mx-auto mb-3">
+        <div class="col-md-7 col-12 mx-auto mb-3">
             <input type="file" class="form-control" id="inlineFormInputGroupUsername" name="image" accept="image/*">
         </div>
         <div class="col-12">
@@ -197,7 +196,7 @@
                 var formData = new FormData(this);
 
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/api/especies',
+                    url: "{{ config('app.back_url') }}/api/especies",
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -213,49 +212,46 @@
                             showCloseButton: true,
                             showConfirmButton: false,
                             html: `
-                            <table class="table table-striped">
-                                <tr>
-                                    <td rowspan="10" style="text-align: left; width:200px;"><img class='img-fluid' src='data:image/jpeg;base64, ${speciesData.image_url}'></td>
-                                    <td style="text-align: left; width:200px;"><strong>Nombre científico:</strong></td>
-                                    <td style="text-align: left;">${speciesData.scientific_name}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; width:200px;"><strong>Clase:</strong></td>
-                                    <td style="text-align: left;">${speciesData.class_name}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; width:200px;"><strong>Familia:</strong></td>
-                                    <td style="text-align: left;">${speciesData.family}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; width:200px;"><strong>Género:</strong></td>
-                                    <td style="text-align: left;">${speciesData.genus}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; width:200px;"><strong>Orden:</strong></td>
-                                    <td style="text-align: left;">${speciesData.order}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; width:200px;"><strong>Filo:</strong></td>
-                                    <td style="text-align: left;">${speciesData.phylum}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; width:200px;"><strong>Información general:</strong></td>
-                                    <td style="text-align: left;">${speciesData.general_information}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; width:200px;"><strong>Características físicas:</strong></td>
-                                    <td style="text-align: left;">${speciesData.morphological_characteristics}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left;  width:200px;"><strong>Información de especie:</strong></td>
-                                    <td style="text-align: left;">${speciesData.species_information}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; width:200px;"><strong>Propiedades medicinales:</strong></td>
-                                    <td style="text-align: left;"> ${speciesData.medicinal_properties.join(", ")}</td>
-                                </tr>
-                            </table>
+                            <div class="species-info">
+                            <div class="row">
+                                <div class="col-md-4">
+                                <img class="img-fluid" src="data:image/jpeg;base64, ${speciesData.image_url}" alt="Imagen del hongo">
+                                </div>
+                                <div class="col-md-8">
+                                <div class="info-item">
+                                    <strong>Nombre científico:</strong> ${speciesData.scientific_name}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Clase:</strong> ${speciesData.class_name}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Familia:</strong> ${speciesData.family}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Género:</strong> ${speciesData.genus}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Orden:</strong> ${speciesData.order}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Filo:</strong> ${speciesData.phylum}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Información general:</strong> ${speciesData.general_information}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Características físicas:</strong> ${speciesData.morphological_characteristics}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Información de especie:</strong> ${speciesData.species_information}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Propiedades medicinales:</strong> ${speciesData.medicinal_properties.join(", ")}
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+
 
                             `,
                           width: "100vw",
@@ -263,17 +259,23 @@
                         });
                         } else {
                         // Display a SweetAlert for unrecognized species
+                         predictButton.html('Predecir');
+                        predictButton.prop('disabled', false);
                         Swal.fire({
-                            title: "<span style='font-size: 24px;'>Species Not Recognized</span>",
+                            title: "<span style='font-size: 24px;'>NO ENCONTRADO</span>",
                             text: "Esa especie no fue reconocida.",
-                            icon: "error",
+                            icon: "warning",
                         });
+
+
                         }
                     },
-                    error: function () {
-                       Swal.fire({
-                            title: "<span style='font-size: 24px;'>Species Not Recognized</span>",
-                            text: "Esa especie no fue reconocida.",
+                    error: function (error) {
+                        predictButton.html('Predecir');
+                        predictButton.prop('disabled', false);
+                        Swal.fire({
+                            title: "<span style='font-size: 24px;'>Ocurrió un error</span>",
+                            text: JSON.stringify(error),
                             icon: "error",
                         });
                     }
@@ -294,7 +296,7 @@
   });
 
   $.ajax({
-    url: 'http://127.0.0.1:8000/api/especies',
+    url: "{{ config('app.back_url') }}/api/especies",
     type: 'PUT',
     contentType: false,
     processData: false,
@@ -319,6 +321,19 @@
     },
   });
 }
+
     </script>
+    <script>
+$(document).ready(function() {
+  $('input[type="file"]').on('change', function() {
+    if (this.files && this.files[0]) {
+      $(this).addClass('is-valid');
+    } else {
+      $(this).removeClass('is-valid');
+    }
+  });
+});
+</script>
+
     </body>
 </html>

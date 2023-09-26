@@ -15,7 +15,7 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-
+    'back_url' => env('BACK_URL', 'http://localhost:8008/'),
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
