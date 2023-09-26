@@ -49,6 +49,7 @@ Siga estos pasos para configurar y ejecutar el proyecto en su entorno local:
 
      ```
      127.0.0.1       hongos.test
+     php artisan serve --host=192.168.0.20 --port=5000
      ```
 
 2. **Clonar el Repositorio:**
