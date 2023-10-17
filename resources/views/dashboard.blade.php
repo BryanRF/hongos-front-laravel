@@ -265,6 +265,9 @@
                               <div class="info-container">
                                   <strong>Descripcion:</strong> ${speciesData.descripcion}
                               </div>
+                              <div class="info-container">
+                                  <strong>Porcentaje:</strong> ${speciesData.porcentaje.toFixed(2)}%
+                              </div>
                           </div>
                             `,
                             width: "80vw",
