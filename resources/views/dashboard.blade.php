@@ -136,7 +136,7 @@
     <div class="dropdown position-fixed bottom-0 end-0 mb-5 me-3 bd-mode-toggle">
        <select class="form-select text-sm" id="algoritmosSelect" name="algoritmo" required>
         <!-- Opción por defecto (puedes cambiar el texto a tu preferencia) -->
-        <option value="" >Selecciona un algoritmo</option>
+        <option value=""  >Selecciona un algoritmo</option>
     </select>
     </div>
 </form>
@@ -263,6 +263,7 @@
                 });
             });
 function entrenar() {
+  var algoritmo_id = $('#algoritmoSelect').val();
   Swal.fire({
     title: 'Entrenar',
     html: '<input type="number" id="numEpocas" class="swal2-input" placeholder="Número de épocas">',
@@ -280,7 +281,7 @@ carga()
         $.ajax({
           url: "{{ config('app.back_url') }}/api/tipo_imagen",
           type: 'PUT',
-          data: JSON.stringify({ epochs: numEpocas }),
+          data: JSON.stringify({ epochs: numEpocas,algoritmo_id:algoritmo_id  }),
           contentType: 'application/json',
           success: function (response) {
             speciesData = response;
