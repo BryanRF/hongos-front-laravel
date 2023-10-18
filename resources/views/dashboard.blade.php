@@ -166,7 +166,7 @@
                     </select>
                 </div>
             </form>
-           
+
 
             <div class="modal fade" id="resultadosModal" tabindex="-1" aria-labelledby="resultadosModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -217,7 +217,7 @@
 
 
     <script>
- 
+
  function verResultadosEntrenamiento(metricas) {
     const data = metricas.map(m => ({
         x: 'Epoch ' + m.epoch,
@@ -415,8 +415,9 @@ $('#resultadosModal .modal-backdrop').on('click', cerrarModal);
                     return document.getElementById('numEpocas').value;
                 },
             }).then((result) => {
-                carga()
+
                 if (result.isConfirmed) {
+                    carga()
                     let numEpocas = result.value;
                     if (numEpocas) {
                         $('#entrenarButton').prop('disabled', true); // Deshabilita el botón de entrenar
@@ -487,7 +488,8 @@ $('#resultadosModal .modal-backdrop').on('click', cerrarModal);
 
         // Actualizar el URL
         if (selectedValue === '3') {
-            window.location.href = 'http://192.168.101.8:5000/svm';
+            let svmUrl = "{{ route('svm') }}";
+            window.location.href = svmUrl;
         } });
     </script>
 

@@ -16,14 +16,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/svm', function () {
     return view('dashboardSVM');
-});
+})->name('svm');
 
 Route::get('/cnn', function () {
     return view('dashboard');
-});
+})->name('cnn');
 
-// Route::get('/', function () {
-//     return view('dashboard');
-// });
+Route::get('/', function () {
+    return view('dashboard');
+});
 
 require __DIR__.'/auth.php';
