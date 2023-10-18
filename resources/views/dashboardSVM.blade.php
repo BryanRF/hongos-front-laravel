@@ -156,10 +156,9 @@
 
                     <button type="submit" class="btn btn-primary" id="predictButton">Predecir</button>
                     <button type="button" onclick="entrenar()" class="btn btn-primary">Entrenar</button>
-                    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resultadosModal" >
+                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resultadosModal" >
                         Ver Resultados
-                        </button> -->
-                </div>
+                        </button>
                 <div class="dropdown position-fixed bottom-0 end-0 mb-5 me-3 bd-mode-toggle">
                     <select class="form-select text-sm" id="algoritmosSelect" name="algoritmo_id" required>
                         <!-- Opción por defecto (puedes cambiar el texto a tu preferencia) -->
@@ -218,46 +217,28 @@
 
     <script>
 
- function verResultadosEntrenamiento(metricas) {
-    const data = metricas.map(m => ({
-        x: 'Epoch ' + m.epoch,
-        loss: m.loss,
-        accuracy: m.accuracy,
-        val_loss: m.val_loss,
-        val_accuracy: m.val_accuracy
-    }));
+function verResultadosEntrenamiento(metricas) {
+    const data = [
+        { label: 'Exactitud', value: metricas.exactitud },
+        { label: 'Precisión', value: metricas.precision },
+        { label: 'Sensibilidad', value: metricas.recall },
+        { label: 'F1 Score', value: metricas.f1_score },
+        { label: 'Ajuste F1', value: metricas.ajuste_f1 }
+    ];
+
+    const labels = data.map(d => d.label);
+    const values = data.map(d => d.value);
 
     const cfg = {
         type: 'bar',
         data: {
-            labels: data.map(d => d.x),
+            labels: labels,
             datasets: [
                 {
-                    label: 'Loss',
-                    data: data,
+                    label: 'Métricas',
+                    data: values,
                     parsing: {
-                        yAxisKey: 'loss'
-                    }
-                },
-                {
-                    label: 'Accuracy',
-                    data: data,
-                    parsing: {
-                        yAxisKey: 'accuracy'
-                    }
-                },
-                {
-                    label: 'Validation Loss',
-                    data: data,
-                    parsing: {
-                        yAxisKey: 'val_loss'
-                    }
-                },
-                {
-                    label: 'Validation Accuracy',
-                    data: data,
-                    parsing: {
-                        yAxisKey: 'val_accuracy'
+                        yAxisKey: 'value'
                     }
                 }
             ]
@@ -272,6 +253,7 @@
     $('#resultadosModal').modal('show');
     chart.update();
 }
+
 
 function cerrarModal() {
 

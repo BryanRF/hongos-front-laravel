@@ -269,17 +269,15 @@
     var chart = new Chart(ctx, cfg);
 
     // Mostrar el contenedor del gráfico
-    var resultadosModal = new bootstrap.Modal(document.getElementById('resultadosModal'));
-    resultadosModal.show();
+    $('#resultadosModal').modal('show');
 
     chart.update();
 }
 
 function cerrarModal() {
     // Cierra el modal usando el método `hide()`
-    // $('#resultadosModal').modal('hide');
-    var resultadosModal = new bootstrap.Modal(document.getElementById('resultadosModal'));
-    resultadosModal.hide();
+     $('#resultadosModal').modal('hide');
+
 }
 
 function generarColor() {
