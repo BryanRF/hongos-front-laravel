@@ -132,7 +132,7 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <header class="mb-auto">
             <div class="mx-auto">
-                <h1 class="float-md-start mb-0">PREDICCION DE CANCER AL CUELLO UTERINO👩‍⚕️ CNN </h1>
+                <h1 class="float-md-start mb-0">PREDICCION DE CANCER AL CUELLO UTERINO👩‍⚕️ SVM </h1>
                 <nav class="nav nav-masthead justify-content-center float-md-end">
 
                 </nav>
@@ -155,10 +155,10 @@
                 <div class="col-12">
 
                     <button type="submit" class="btn btn-primary" id="predictButton">Predecir</button>
-                    <button type="button" onclick="entrenar()" class="btn btn-primary">Entrenar</button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resultadosModal" >
+                    <!-- <button type="button" onclick="entrenar()" class="btn btn-primary">Entrenar</button> -->
+                    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resultadosModal" >
                         Ver Resultados
-                        </button>
+                        </button> -->
                 </div>
                 <div class="dropdown position-fixed bottom-0 end-0 mb-5 me-3 bd-mode-toggle">
                     <select class="form-select text-sm" id="algoritmosSelect" name="algoritmo_id" required>
@@ -269,17 +269,13 @@
     var chart = new Chart(ctx, cfg);
 
     // Mostrar el contenedor del gráfico
-    var resultadosModal = new bootstrap.Modal(document.getElementById('resultadosModal'));
-    resultadosModal.show();
-
+    $('#resultadosModal').modal('show');
     chart.update();
 }
 
 function cerrarModal() {
-    // Cierra el modal usando el método `hide()`
-    // $('#resultadosModal').modal('hide');
-    var resultadosModal = new bootstrap.Modal(document.getElementById('resultadosModal'));
-    resultadosModal.hide();
+  
+    $('#resultadosModal').modal('hide');
 }
 
 function generarColor() {
@@ -303,6 +299,8 @@ $('#resultadosModal .modal-backdrop').on('click', cerrarModal);
                                 .nombre
                         }));
                     });
+
+                    $('#algoritmosSelect').val('3');
                 },
                 error: function(error) {
                     console.log('Error al obtener la lista de algoritmos:', error);
@@ -335,7 +333,7 @@ $('#resultadosModal .modal-backdrop').on('click', cerrarModal);
 
             $('.invalid-feedback').hide();
             $.ajax({
-                url: "{{ config('app.back_url') }}/api/tipo_imagen",
+                url: "{{ config('app.back_url') }}/api/tipo_imagen_svm",
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -398,79 +396,86 @@ $('#resultadosModal .modal-backdrop').on('click', cerrarModal);
                 }
             });
         });
+        $('#algoritmosSelect').on('change', function() {
+        var selectedValue = $(this).val();
 
-        function entrenar() {
-            var algoritmo_id = $('#algoritmosSelect').val();
-            if(algoritmo_id==null||algoritmo_id==''||algoritmo_id===''){ Swal.fire({
-                                    title: 'Faltan datos',
-                                    text: 'Seleccione un algoritmo.',
-                                    icon: 'error',
-                                });}
-            Swal.fire({
-                title: 'Entrenar',
-                html: '<input type="number" id="numEpocas" class="swal2-input" placeholder="Número de épocas">',
-                showCancelButton: true,
-                confirmButtonText: 'Entrenar',
-                preConfirm: () => {
-                    return document.getElementById('numEpocas').value;
-                },
-            }).then((result) => {
-                carga()
-                if (result.isConfirmed) {
-                    let numEpocas = result.value;
-                    if (numEpocas) {
-                        $('#entrenarButton').prop('disabled', true); // Deshabilita el botón de entrenar
-                        $.ajax({
-                            url: "{{ config('app.back_url') }}/api/tipo_imagen",
-                            type: 'PUT',
-                            data: JSON.stringify({
-                                epochs: numEpocas,
-                                algoritmo_id: algoritmo_id
-                            }),
-                            contentType: 'application/json',
-                            success: function(response) {
-                                speciesData = response;
-                                Swal.fire({
-                                    title: `<span style='font-size: 24px;'> Proceso exitoso</span> `,
-                                    text: response.mensaje,
-                                    icon: 'success',
-                                    showCloseButton: true,
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Ver Resultados',
-                                    cancelButtonText: 'Cerrar',
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        verResultadosEntrenamiento(speciesData.metricas);
-                                    }
-                                });
-                            },
-                            error: function() {
-                                Swal.fire({
-                                    title: 'Error de servidor',
-                                    text: 'Ha ocurrido un error en el servidor.',
-                                    icon: 'error',
-                                });
-                            },
-                            complete: function() {
-                                // Al completar la solicitud, habilita el botón de entrenar y oculta el spinner
-                                $('#entrenarButton').prop('disabled', false);
-                            }
-                        });
-                    }
-                }
-            });
-        }
+        // Actualizar el URL
+        if (selectedValue === '2') {
+            window.location.href = 'http://192.168.101.8:5000/cnn';
+        } 
+    });
+        // function entrenar() {
+        //     var algoritmo_id = $('#algoritmosSelect').val();
+        //     if(algoritmo_id==null||algoritmo_id==''||algoritmo_id===''){ Swal.fire({
+        //                             title: 'Faltan datos',
+        //                             text: 'Seleccione un algoritmo.',
+        //                             icon: 'error',
+        //                         });}
+        //     Swal.fire({
+        //         title: 'Entrenar',
+        //         html: '<input type="number" id="numEpocas" class="swal2-input" placeholder="Número de épocas">',
+        //         showCancelButton: true,
+        //         confirmButtonText: 'Entrenar',
+        //         preConfirm: () => {
+        //             return document.getElementById('numEpocas').value;
+        //         },
+        //     }).then((result) => {
+        //         carga()
+        //         if (result.isConfirmed) {
+        //             let numEpocas = result.value;
+        //             if (numEpocas) {
+        //                 $('#entrenarButton').prop('disabled', true); // Deshabilita el botón de entrenar
+        //                 $.ajax({
+        //                     url: "{{ config('app.back_url') }}/api/tipo_imagen",
+        //                     type: 'PUT',
+        //                     data: JSON.stringify({
+        //                         epochs: numEpocas,
+        //                         algoritmo_id: algoritmo_id
+        //                     }),
+        //                     contentType: 'application/json',
+        //                     success: function(response) {
+        //                         speciesData = response;
+        //                         Swal.fire({
+        //                             title: `<span style='font-size: 24px;'> Proceso exitoso</span> `,
+        //                             text: response.mensaje,
+        //                             icon: 'success',
+        //                             showCloseButton: true,
+        //                             showCancelButton: true,
+        //                             confirmButtonText: 'Ver Resultados',
+        //                             cancelButtonText: 'Cerrar',
+        //                         }).then((result) => {
+        //                             if (result.isConfirmed) {
+        //                                 verResultadosEntrenamiento(speciesData.metricas);
+        //                             }
+        //                         });
+        //                     },
+        //                     error: function() {
+        //                         Swal.fire({
+        //                             title: 'Error de servidor',
+        //                             text: 'Ha ocurrido un error en el servidor.',
+        //                             icon: 'error',
+        //                         });
+        //                     },
+        //                     complete: function() {
+        //                         // Al completar la solicitud, habilita el botón de entrenar y oculta el spinner
+        //                         $('#entrenarButton').prop('disabled', false);
+        //                     }
+        //                 });
+        //             }
+        //         }
+        //     });
+        // }
 
 
-        function carga() {
-            Swal.fire({
-                title: 'Entrenando...',
-                html: '<div class="spinner-border" role="status"><span class="sr-only"></span></div>',
-                allowOutsideClick: false,
-                showCancelButton: false,
-                showConfirmButton: false,
-            });
-        }
+        // function carga() {
+        //     Swal.fire({
+        //         title: 'Entrenando...',
+        //         html: '<div class="spinner-border" role="status"><span class="sr-only"></span></div>',
+        //         allowOutsideClick: false,
+        //         showCancelButton: false,
+        //         showConfirmButton: false,
+        //     });
+        // }
 
         $(document).ready(function() {
             $('input[type="file"]').on('change', function() {
@@ -481,14 +486,6 @@ $('#resultadosModal .modal-backdrop').on('click', cerrarModal);
                 }
             });
         });
-
-        $('#algoritmosSelect').on('change', function() {
-        var selectedValue = $(this).val();
-
-        // Actualizar el URL
-        if (selectedValue === '3') {
-            window.location.href = 'http://192.168.101.8:5000/svm';
-        } });
     </script>
 
 </body>
