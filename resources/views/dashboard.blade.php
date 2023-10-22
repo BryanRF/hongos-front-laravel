@@ -264,19 +264,23 @@
         }
     };
 
-    // Crear un gráfico con Chart.js
     var ctx = document.getElementById('graficoEntrenamiento').getContext('2d');
+
+    // Obtener el gráfico existente si lo hay
+    var existingChart = Chart.getChart(ctx);
+
+    // Destruir el gráfico existente si lo hay
+    if (existingChart) {
+        existingChart.destroy();
+    }
+
+    // Crear un nuevo gráfico con Chart.js
     var chart = new Chart(ctx, cfg);
 
     // Mostrar el contenedor del gráfico
     $('#resultadosModal').modal('show');
 
     chart.update();
-}
-
-function cerrarModal() {
-    // Cierra el modal usando el método `hide()`
-     $('#resultadosModal').modal('hide');
 
 }
 
